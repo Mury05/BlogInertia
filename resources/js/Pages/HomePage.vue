@@ -1,4 +1,5 @@
 <template>
+  <MaNav/>
   <main class="bg-gray-50 dark:bg-gray-900 py-16 px-6 sm:px-8 lg:px-16">
     <div class="max-w-7xl mx-auto space-y-12">
       <!-- Section de bienvenue -->
@@ -10,9 +11,11 @@
           Organisez et gérez vos articles de manière simple et efficace.
         </p>
         <div class="mt-8">
-          <button class="py-3 px-8 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all duration-300">
-            Commencer à gérer
-          </button>
+          <router-link to="/articles">
+            <button class="py-3 px-8 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all duration-300">
+              Commencer à gérer
+            </button>
+          </router-link>
         </div>
       </section>
 
@@ -137,6 +140,8 @@
   </main>
 </template>
 
-<script>
+<script setup>
+import MaNav from '@/Layouts/MaNav.vue';
+
 
 </script>

@@ -18,22 +18,30 @@ Route::get('/dashboard/{any?}', function () {
     return Inertia::render('Dashboard');
 })->where('any', '.*')->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/comment', function () {
-    return Inertia::render('Comment');
-});
 
 Route::get('/home', function () {
     return Inertia::render('HomePage');
-});
+})->name('home');;
 
 Route::get('/articles', action: function () {
-    return Inertia::render('articleList');
-});
+    return Inertia::render('ArticleList');
+})->name('articles');;
+
+Route::get('/edit', function () {
+    return Inertia::render('Edit');
+})->name('edit');;
+
+Route::get('/articleE', action: function () {
+    return Inertia::render('ArticleEditer');
+})->name('articleE');;
 
 Route::get('/article', action: function () {
-    return Inertia::render('articleDetail');
-});
+    return Inertia::render('ArticleDetail');
+})->name('article');;
 
+Route::get('/create', action: function () {
+    return Inertia::render('Create');
+})->name('create');;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
