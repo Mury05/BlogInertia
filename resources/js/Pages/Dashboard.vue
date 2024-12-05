@@ -23,7 +23,7 @@ import AllUsers from './Dashboard/Users/AllUsers.vue';
         <!-- ===== Content Component Start ===== -->
         <div class="flex-grow text-gray-800">
 
-            <div class="p-6 sm:p-4 space-y-6">
+            <div class="p-6 sm:p-0 space-y-6">
 
                 <!-- <div class="py-5">
                     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -36,7 +36,7 @@ import AllUsers from './Dashboard/Users/AllUsers.vue';
                 </div> -->
 
                 <!-- <AllUsers/> -->
-                <router-view />
+                <slot></slot>
 
             </div>
 

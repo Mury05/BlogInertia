@@ -1,12 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
 import ApplicationLogo from '../ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
 
-const router = useRoute();
-
-const isActive = (path) => computed(() => router.path === path);
 </script>
 
 <template>
@@ -16,11 +11,12 @@ const isActive = (path) => computed(() => router.path === path);
             <ApplicationLogo class="block h-9 w-auto fill-indigo-600 text-gray-800" />
             <span class="font-bold text-indigo-600">ArtLog</span>
         </Link>
-        <div class="flex-grow flex flex-col justify-between text-gray-500 bg-indigo-50">
+        <div class="flex-grow pt-20 flex flex-col justify-between text-gray-500 bg-indigo-50">
             <nav class="flex flex-col my-6 space-y-4">
-                <RouterLink to="/dashboard/"
-                            class="inline-flex items-center justify-center py-3 border-y border-l border-indigo-300 rounded-s-md hover:bg-indigo-50"
-                            :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': isActive('/articles').value }">
+                <Link
+                    href="/dashboard/"
+                    class="inline-flex items-center justify-center py-3 border-y border-l border-indigo-300 rounded-s-md hover:bg-indigo-50"
+                    :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': route().current('dashboard') }">
                     <span class="sr-only">Articles</span>
                     <div class="flex gap-2">
                         <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
@@ -29,11 +25,12 @@ const isActive = (path) => computed(() => router.path === path);
                         </svg>
                         <div class="font-medium">Articles</div>
                     </div>
-                </RouterLink>
+                </Link>
 
-                <RouterLink to="/dashboard/users"
-                            class="inline-flex items-center justify-center py-3 border-y border- border-indigo-300 rounded-s-md hover:bg-indigo-50"
-                            :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': isActive('/dashboard/users').value }">
+                <Link
+                    href="/dashboard/users"
+                    class="inline-flex items-center justify-center py-3 border-y border-indigo-300 rounded-s-md hover:bg-indigo-50"
+                    :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': route().current('dashboard.users.index') }">
                     <span class="sr-only">Users</span>
                     <div class="flex gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -43,11 +40,12 @@ const isActive = (path) => computed(() => router.path === path);
                         </svg>
                         <div class="font-medium">Utilisateurs</div>
                     </div>
-                </RouterLink>
+                </Link>
 
-                <RouterLink to="/dashboard/new-job"
-                            class="inline-flex items-center justify-center py-3 border-y border- border-indigo-300 rounded-s-md hover:bg-indigo-50"
-                            :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': isActive('/dashboard/new-job').value }">
+                <Link
+                    href="/dashboard/new-job"
+                    class="inline-flex items-center justify-center py-3 border-y border-indigo-300 rounded-s-md hover:bg-indigo-50"
+                    :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': route().current('dashboard.new-job') }">
                     <span class="sr-only">New Job</span>
                     <div class="flex gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -56,11 +54,12 @@ const isActive = (path) => computed(() => router.path === path);
                         </svg>
                         <div class="font-medium">Job</div>
                     </div>
-                </RouterLink>
+                </Link>
 
-                <RouterLink to="/dashboard/profile"
-                            class="inline-flex items-center justify-center py-3 border-y border- border-indigo-300 rounded-s-md hover:bg-indigo-50"
-                            :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': isActive('/dashboard/profile').value }">
+                <Link
+                    href="/dashboard/profile"
+                    class="inline-flex items-center justify-center py-3 border-y border-indigo-300 rounded-s-md hover:bg-indigo-50"
+                    :class="{ 'text-indigo-600 bg-gray-100 rounded-s-sm': route().current('dashboard.profile') }">
                     <span class="sr-only">Profile</span>
                     <div class="flex gap-2">
                         <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
@@ -69,11 +68,10 @@ const isActive = (path) => computed(() => router.path === path);
                         </svg>
                         <div class="font-medium">Profile</div>
                     </div>
-                </RouterLink>
+                </Link>
             </nav>
         </div>
     </aside>
 </template>
-
 
 <style scoped></style>

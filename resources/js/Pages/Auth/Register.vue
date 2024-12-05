@@ -9,16 +9,36 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 const form = useForm({
     name: '',
     email: '',
+    birthdate: '',
+    avatar: null, // Stocker le fichier ici
     password: '',
     password_confirmation: '',
 });
 
 const submit = () => {
+    const formData = new FormData();
+
+    // Ajouter tous les champs au FormData
+    formData.append('name', form.name);
+    formData.append('email', form.email);
+    formData.append('birthdate', form.birthdate);
+    formData.append('password', form.password);
+    formData.append('password_confirmation', form.password_confirmation);
+
+    // Ajouter le fichier si présent
+    if (form.avatar) {
+        formData.append('avatar', form.avatar);
+    }
+
+    // Envoyer via Inertia
     form.post(route('register'), {
+        data: formData,
         onFinish: () => form.reset('password', 'password_confirmation'),
+        forceFormData: true, // Important pour qu'Inertia sache que c'est un FormData
     });
 };
 </script>
+
 
 <template>
     <GuestLayout>
@@ -55,6 +75,20 @@ const submit = () => {
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
+            <div class="mt-4">
+                <InputLabel for="birthdate" value="Date de naissance" />
+
+                <TextInput
+                    id="birthdate"
+                    type="date"
+                    class="mt-1 block w-full"
+                    v-model="form.birthdate"
+                    autocomplete="date"
+
+                />
+
+                <InputError class="mt-2" :message="form.errors.birthdate" />
+            </div>
 
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
@@ -90,6 +124,20 @@ const submit = () => {
                     class="mt-2"
                     :message="form.errors.password_confirmation"
                 />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="avatar" value="Avatar" />
+
+                <TextInput
+                    id="avatar"
+                    type="file"
+                    class="mt-1 block w-full"
+                    @change="(e) => form.avatar = e.target.files[0]" 
+
+                />
+
+                <InputError class="mt-2" :message="form.errors.avatar" />
             </div>
 
             <div class="mt-4 flex items-center justify-end">
