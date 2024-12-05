@@ -14,11 +14,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard/{any?}', function () {
-    return Inertia::render('Dashboard');
-})->where('any', '.*')->middleware(['auth', 'verified'])->name('dashboard');
-
-
 Route::get('/home', function () {
     return Inertia::render('HomePage');
 })->name('home');;
@@ -52,3 +47,4 @@ Route::middleware('auth')->group(function () {
 
 
 require __DIR__.'/auth.php';
+require __DIR__.'/dashboard.php';
