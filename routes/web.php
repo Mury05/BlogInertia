@@ -14,9 +14,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard/{any?}', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->where('any', '.*')->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/comment', function () {
     return Inertia::render('Comment');
