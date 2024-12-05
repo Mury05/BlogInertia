@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('comment', 255);
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('article_id');
+            $table->foreignId('article_id')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
-            $table->foreign('article_id')->references('id')->on('articles')->onDelete('CASCADE');
+            $table->foreign('article_id')->references('id')->on('articles')->onDelete('SET NULL');
         });
     }
 
