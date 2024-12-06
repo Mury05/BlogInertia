@@ -21,3 +21,7 @@ Route::get('/dashboard/users/{user}/edit', [UserController::class, 'edit'])->mid
 Route::put('/dashboard/users/{user}/edit', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('dashboard.users.update');
 
 Route::delete('/dashboard/users/{user}', [UserController::class, 'destroy'])->middleware(['auth', 'verified'])->name('dashboard.users.destroy');
+
+Route::get('/dashboard/articles', [ArticleController::class, 'indexAuth'])->middleware(['auth', 'verified'])->name('dashboard.articles.index');
+
+Route::get('/dashboard/articles/create', [ArticleController::class, 'create'])->name('dashboard.articles.create');

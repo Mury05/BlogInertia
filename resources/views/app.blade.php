@@ -13,6 +13,7 @@
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+        <script src="https://cdn.tiny.cloud/1/ghvru42l4s7gxo9wkfhapqwif5ee7xk762cfh392jwlcjyuf/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

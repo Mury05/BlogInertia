@@ -13,9 +13,9 @@ import { Link } from '@inertiajs/vue3';
         <div class="flex-grow pt-8 flex flex-col justify-between text-gray-500">
             <nav class="flex flex-col my-6 space-y-2">
                 <Link
-                    href="/dashboard/"
+                    :href="route('dashboard.articles.index')"
                     class="flex items-center justify-start p-3 rounded-md hover:bg-indigo-100 transition-colors duration-300"
-                    :class="{ 'text-indigo-600 bg-indigo-200': route().current('dashboard') }">
+                    :class="{ 'text-indigo-600 bg-indigo-200': route().current('dashboard.articles.index') }">
                     <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 mr-2">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                     </svg>

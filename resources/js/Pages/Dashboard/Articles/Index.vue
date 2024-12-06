@@ -1,11 +1,24 @@
 <template>
-  <MaNav />
+ <Dashboard>
 
-  <div class="p-8 bg-white min-h-screen flex flex-col items-center justify-start">
-    <h1 class="text-5xl font-extrabold text-center text-black mb-16">
-      Articles captivants pour vous inspirer
-    </h1>
+<Head title="New Article" />
+<header class="bg-white shadow rounded-md">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            Dashboard/Utilisateurs/Ajouter un utilisateur
+        </h2>
+    </div>
+</header>
+  <div class="p- mx-2 rounded-sm bg-white min-h-screen flex flex-col items-center justify-start">
+    <div class="flex justify-end w-full mr-8" >
 
+        <Link :href="route('dashboard.articles.create')" >
+
+        <button class="py-3 px-8 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700">
+                            Ajouter un article
+                        </button>
+                    </Link>
+    </div>
     <!-- Si aucun article n'est trouvé -->
     <div v-if="articles.length === 0" class="text-gray-600">
       Aucun article trouvé.
@@ -57,10 +70,13 @@
       </div>
     </div>
   </div>
+</Dashboard>
+
 </template>
 
 <script setup>
 import MaNav from '@/Layouts/MaNav.vue';
+import Dashboard from '@/Pages/Dashboard.vue';
 import { Link } from '@inertiajs/vue3'
 
 // Propriétés passées par Laravel via Inertia

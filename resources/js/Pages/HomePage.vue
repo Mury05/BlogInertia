@@ -29,7 +29,7 @@
                         class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 h-full">
                         <!-- Image (optionnelle) -->
                         <div class="mb-6">
-                            <img :src="article.image || 'https://via.placeholder.com/400x200'" alt="Image de l'article"
+                            <img :src="`/storage/${article.image}`" alt="Image de l'article"
                                 class="w-full h-48 object-cover rounded-lg" />
                         </div>
                         <!-- Titre de l'article -->
@@ -38,7 +38,7 @@
                         </h3>
                         <!-- Extrait -->
                         <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                            {{ article.body.slice(0, 150) }}...
+                            {{ truncateText(article.body, 100) }}..
                         </p>
                         <!-- Bouton -->
                         <Link :href="`/articles/${article.id}`" method="get" as="button" type="button"
@@ -119,6 +119,14 @@ const props = defineProps({
 
 // Debug : pour vérifier les données
 console.log(props.articles);
+
+// Fonction pour nettoyer et tronquer le texte brut
+function truncateText(html, length) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html; // Injecte le HTML brut dans un div temporaire
+    const textContent = tempDiv.textContent || ''; // Extrait uniquement le texte brut
+    return textContent.slice(0, length) + '...'; // Tronque et ajoute des points de suspension
+}
 </script>
 
 <style scoped>

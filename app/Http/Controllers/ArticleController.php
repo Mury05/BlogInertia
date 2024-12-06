@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,6 +22,19 @@ class ArticleController extends Controller
             'articles' => $articles,
         ]);
     }
+    public function indexAuth()
+    {
+        // Récupérer les articles de l'utilisateur connecté avec leur catégorie associée
+        $user = Auth::user(); // Obtenir l'utilisateur connecté
+        $articles = Article::with('category')->where('user_id', $user->id)->get();
+
+        // Passer les articles et leurs catégories à la vue Inertia
+        return Inertia::render('Dashboard/Articles/Index', [
+            'articles' => $articles,
+        ]);
+    }
+
+
 
     // Affichage du formulaire de création d'article
     public function create()
@@ -43,7 +57,7 @@ class ArticleController extends Controller
             'body' => 'required|string',
             'tags' => 'required|string',
             'category' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
         ]);
 
         // Gestion de l'upload de l'image
@@ -58,19 +72,19 @@ class ArticleController extends Controller
             'body' => $request->body,
             'tags' => $request->tags,
             'image' => $imagePath, // Stockage du chemin de l'image
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'category_id' => $request->category,
         ]);
 
         // Rediriger après la création avec un message de succès
-        return redirect()->route('articles.create')->with('success', 'Article créé avec succès');
+        return redirect()->route('dashboard.articles.index')->with('success', 'Article créé avec succès');
     }
 
     // Affichage d'un article spécifique avec sa catégorie et son image
     public function show($id)
     {
         // Récupérer l'article par son ID, avec la catégorie associée
-        $article = Article::with('category')->findOrFail($id);
+        $article = Article::with('category')->with('user')->with('comments.user')->findOrFail($id);
 
         // Passer l'article à la vue Inertia
         return Inertia::render('ArticleDetail', [
