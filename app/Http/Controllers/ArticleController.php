@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -40,14 +41,24 @@ class ArticleController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
+            'tags' => 'required|string',
             'category' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
         ]);
+
+        // Gestion de l'upload de l'image
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('articles', 'public'); // Stocker l'image dans le dossier public/articles
+        }
 
         // Création de l'article
         Article::create([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => auth()->id(), // Assurez-vous que l'utilisateur est authentifié
+            'tags' => $request->tags,
+            'image' => $imagePath, // Stockage du chemin de l'image
+            'user_id' => auth()->id(), 
             'category_id' => $request->category,
         ]);
 
@@ -55,7 +66,7 @@ class ArticleController extends Controller
         return redirect()->route('articles.create')->with('success', 'Article créé avec succès');
     }
 
-    // Ajoutez la méthode show dans le contrôleur ArticleController
+    // Affichage d'un article spécifique avec sa catégorie et son image
     public function show($id)
     {
         // Récupérer l'article par son ID, avec la catégorie associée
@@ -66,19 +77,19 @@ class ArticleController extends Controller
             'article' => $article,
         ]);
     }
+
     public function homePage()
-{
-    // Récupérer les 3 derniers articles avec leurs catégories associées
-    $articles = Article::with('category')->latest()->take(3)->get();
+    {
+        // Récupérer les 3 derniers articles avec leurs catégories associées
+        $articles = Article::with('category')->latest()->take(3)->get();
 
-    // Récupérer les 4 dernières catégories
-    $categories = Category::latest()->take(4)->get();
+        // Récupérer les 4 dernières catégories
+        $categories = Category::latest()->take(4)->get();
 
-    // Retourner les données à la vue
-    return Inertia::render('HomePage', [
-        'articles' => $articles,
-        'categories' => $categories,
-    ]);
-}
-
+        // Retourner les données à la vue
+        return Inertia::render('HomePage', [
+            'articles' => $articles,
+            'categories' => $categories,
+        ]);
+    }
 }
