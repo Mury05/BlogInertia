@@ -1,98 +1,74 @@
 <template>
-  <MaNav/>
-  <div class="p-8 bg-white min-h-screen">
-    <h1 class="text-4xl font-extrabold text-center text-black mb-12">
+  <MaNav />
+
+  <div class="p-8 bg-white min-h-screen flex flex-col items-center justify-start">
+    <h1 class="text-5xl font-extrabold text-center text-black mb-16">
       Articles captivants pour vous inspirer
     </h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+
+    <!-- Si aucun article n'est trouvé -->
+    <div v-if="articles.length === 0" class="text-gray-600">
+      Aucun article trouvé.
+    </div>
+
+    <!-- Si des articles sont présents -->
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
       <div v-for="article in articles" :key="article.id"
-        class="group relative bg-gray-100 shadow-lg rounded-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-        <!-- Animation à l'intérieur -->
-        <div class="p-6 h-full flex flex-col justify-between">
-          <div>
-            <h2 class="text-xl font-semibold text-black mb-3 group-hover:text-blue-600 transition duration-300 " style="width:300px">
-              {{ article.title }}
-            </h2>
-            <p class="text-gray-700 mb-6">
-              {{ article.content }}
-            </p>
+        class="relative mb-6 bg-white shadow-2xl rounded-lg p-10 overflow-hidden w-full">
+
+        <!-- Contenu de l'article -->
+        <div class="flex w-full justify-between items-center mb-6">
+
+          <!-- Titre de l'article avec largeur de 70% et espacement avec le bouton -->
+          <h3 class="text-3xl font-bold text-gray-800 w-7/10 mr-4">{{ article.title }}</h3>
+
+          <!-- Bouton de commentaires avec largeur de 30% et espacement avec le svg -->
+          <div class="w-3/10 flex justify-end">
+            <Link :href="route('articles.show', article.id)" method="get" as="button" type="button"
+              class="relative inline-flex items-center justify-center p-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-5 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+              </svg>
+              <span class="sr-only">Notifications</span>
+              Commentaires
+              <div
+                class="absolute inline-flex items-center justify-center w-5 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2">
+                8
+              </div>
+            </Link>
           </div>
-          <router-link :to="`/article/${article.id}`">
-            <button
-              class="w-full py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300">
-              Voir plus
-            </button>
-          </router-link>
         </div>
-        <!-- Design coin supérieur -->
-        <div
-          class="absolute top-0 right-0 h-12 w-12rounded-br-xl transform -translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0 transition duration-300">
-          <button type="button"
-            class="relative inline-flex items-center px-6 py-3 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-              viewBox="0 0 20 16">
-              <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
-              <path
-                d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
-            </svg>
-            <span class="sr-only">Notifications</span>
-            Commentaires
-            <div
-              class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2">
-              8
-            </div>
-          </button>
+
+        <!-- Corps de l'article -->
+        <p class="text-gray-700 mt-6 text-lg leading-relaxed">{{ article.body }}</p>
+
+        <!-- Catégorie -->
+        <div class="mt-6 text-sm text-gray-500">
+          Catégorie : <span class="font-semibold">{{ article.category.libelle }}</span>
         </div>
+
+        <!-- Lien Voir Plus -->
+        <Link :href="route('articles.show', article.id)" as="button" type="button"
+          class="w-full py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 mt-4">
+          Voir plus...
+        </Link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-
 import MaNav from '@/Layouts/MaNav.vue';
+import { Link } from '@inertiajs/vue3'
 
-import { ref } from 'vue';
-
-const articles = ref([
-  {
-    id: 1,
-    title: "Comment maîtriser votre temps efficacement",
-    content:
-      "Découvrez des stratégies simples mais puissantes pour prendre le contrôle de vos journées."
-  },
-  {
-    id: 2,
-    title: "Les bienfaits de la méditation quotidienne",
-    content:
-      "Explorez comment quelques minutes par jour peuvent transformer votre mental et votre bien-être."
-  },
-  {
-    id: 3,
-    title: "Créer un espace qui favorise la créativité",
-    content:
-      "Apprenez à organiser et décorer votre environnement pour encourager l’innovation."
-  },
-  {
-    id: 4,
-    title: "Manger mieux sans se priver",
-    content:
-      "Adoptez une approche équilibrée pour savourer vos repas tout en restant en forme."
-  },
-  {
-    id: 5,
-    title: "Pourquoi la gratitude change tout",
-    content:
-      "Découvrir les impacts positifs d'une simple pratique de reconnaissance sur votre vie."
-  },
-  {
-    id: 6,
-    title: "Faire des pauses : une clé pour plus de productivité",
-    content:
-      "Les pauses stratégiques ne vous ralentissent pas, elles vous boostent."
-  }
-]);
-
+// Propriétés passées par Laravel via Inertia
+defineProps({
+  articles: Array,
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Styles supplémentaires si nécessaire */
+</style>
