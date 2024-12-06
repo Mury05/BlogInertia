@@ -81,6 +81,7 @@ class CategoryController extends Controller
     {
         $category->delete();
 
+    // Après suppression, on redirige vers la page d'index avec la liste mise à jour
         return redirect()->route('categories.index');
     }
 }

@@ -78,15 +78,16 @@ const destroyCategory = async (id) => {
     await axios.delete(route("categories.destroy", id));
 
     // Retirer la catégorie supprimée de la liste sans recharger la page
-    const index = categories.findIndex((category) => category.id === id);
-    if (index !== -1) {
-      categories.splice(index, 1); // Retirer la catégorie de la liste affichée
-    }
+
+    await Inertia.get(route("categories.index")); // const index = categories.findIndex((category) => category.id === id);
+    // if (index !== -1) {
+    //   categories.splice(index, 1); // Retirer la catégorie de la liste affichée
+    // }
   }
 };
 
 const addCategory = (category) => {
-  // Ajouter la nouvelle catégorie en haut de la liste
+  // Ajoute la nouvelle catégorie en haut de la liste
   categories.unshift(category);
 };
 </script>
