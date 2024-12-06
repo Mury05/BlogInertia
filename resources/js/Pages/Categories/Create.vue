@@ -47,6 +47,7 @@
 import { useForm } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
+// Récupérer les catégories depuis les props
 const { categories } = usePage().props;
 
 const form = useForm({
@@ -57,8 +58,8 @@ const form = useForm({
 const submit = () => {
   form.post(route("categories.store"), {
     onSuccess: (response) => {
-      // Ajouter la catégorie au début de la liste
-      categories.unshift(response.props.category);
+      // Ajouter la catégorie nouvellement créée en haut de la liste
+      categories.unshift(response.props.category); // Ajouter la catégorie en haut
     },
   });
 };

@@ -36,12 +36,16 @@ class CategoryController extends Controller
             'libelle' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
         ]);
-
+    
+        // Création de la nouvelle catégorie
         $category = Category::create($request->only('libelle', 'description'));
-
+    
+        // Récupérer la liste complète des catégories, y compris la nouvelle catégorie
+        $categories = Category::all();
+    
+        // Retourner la liste complète des catégories
         return Inertia::render('Categories/Index', [
-            'categories' => Category::all(),
-            'category' => $category,  // Inclure la nouvelle catégorie
+            'categories' => $categories, // Renvoie toutes les catégories, y compris la nouvelle
         ]);
     }
 

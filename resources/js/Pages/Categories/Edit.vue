@@ -59,6 +59,7 @@ const submit = () => {
   form.put(route("categories.update", props.category.id), {
     onSuccess: () => {
       // Ici, vous pouvez ajouter un message de confirmation ou rediriger
+      "Voulez-vous être rediriger ?";
     },
   });
 };
