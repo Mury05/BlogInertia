@@ -19,21 +19,6 @@ Route::get('/', function () {
 //     return Inertia::render('HomePage');
 // })->name('home');
 
-Route::get('/home', [ArticleController::class, 'homePage'])->name('home');
-
-// Liste des articles
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles');
-
-
-// Formulaire de création d'un article
-Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-// Affichage d'un article
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
-Route::get('/articles/recent', [ArticleController::class, 'getRecentArticles'])->name('articles.recent');
-
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -43,3 +28,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/dashboard.php';
+require __DIR__.'/articles.php';

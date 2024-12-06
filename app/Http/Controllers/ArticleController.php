@@ -28,7 +28,7 @@ class ArticleController extends Controller
         $categories = Category::all();
 
         // Passer les catégories à la vue Inertia
-        return Inertia::render('Create', [
+        return Inertia::render('Dashboard/Articles/Create', [
             'categories' => $categories,
         ]);
     }
@@ -67,18 +67,18 @@ class ArticleController extends Controller
         ]);
     }
     public function homePage()
-{
-    // Récupérer les 3 derniers articles avec leurs catégories associées
-    $articles = Article::with('category')->latest()->take(3)->get();
+    {
+        // Récupérer les 3 derniers articles avec leurs catégories associées
+        $articles = Article::with('category')->latest()->take(3)->get();
 
-    // Récupérer les 4 dernières catégories
-    $categories = Category::latest()->take(4)->get();
+        // Récupérer les 4 dernières catégories
+        $categories = Category::latest()->take(4)->get();
 
-    // Retourner les données à la vue
-    return Inertia::render('HomePage', [
-        'articles' => $articles,
-        'categories' => $categories,
-    ]);
-}
+        // Retourner les données à la vue
+        return Inertia::render('HomePage', [
+            'articles' => $articles,
+            'categories' => $categories,
+        ]);
+    }
 
 }
