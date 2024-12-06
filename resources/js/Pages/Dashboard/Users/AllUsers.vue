@@ -1,23 +1,44 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import Dashboard from '@/Pages/Dashboard.vue';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/fr';
+import Modal from '@/Components/Modal.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+
+dayjs.extend(relativeTime);
+dayjs.locale('fr');
 
 defineProps(['users']);
 
 // Définissez la méthode pour vérifier l'existence du fichier
 const fileExists = (avatar) => {
-    // Vérifiez si l'avatar est défini et a une valeur
-    if (!avatar) return false;
-
-    // Ici, vous pouvez utiliser une logique pour vérifier l'existence de l'avatar
-    // Comme une requête API ou une propriété que vous passez lors de la récupération des utilisateurs.
-    // Pour l'instant, supposons que vous avez une méthode pour le faire.
-
-    // Par exemple, vous pourriez faire une requête pour vérifier l'existence du fichier
-    return true; // Remplacez cela par votre logique réelle
+    return !!avatar; // Vérifie si l'avatar est défini et a une valeur
 };
 
+const confirmingUserDeletion = ref(false);
+const userToDelete = ref(null); // Utilisé pour stocker l'utilisateur à supprimer
+const form = useForm({
+});
+const confirmUserDeletion = (user) => {
+    userToDelete.value = user; // Stocke l'utilisateur sélectionné
+    confirmingUserDeletion.value = true; // Ouvre le modal
+};
+
+const deleteUser = () => {
+    form.delete(route('dashboard.users.destroy', { user: userToDelete.value.id }), {
+        preserveScroll: true,
+        onSuccess: () => closeModal()
+    });
+};
+
+const closeModal = () => {
+    confirmingUserDeletion.value = false;
+    userToDelete.value = null; // Réinitialise l'utilisateur
+};
 </script>
 
 <template>
@@ -62,7 +83,7 @@ const fileExists = (avatar) => {
                         </div>
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            <Link href="/dashboard/new-user"
+                            <Link :href="route('dashboard.users.new-user')"
                                 class="flex items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2">
                             <svg class="h-3.5 w-3.5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -82,6 +103,7 @@ const fileExists = (avatar) => {
                                     <th scope="col" class="p-4">Username</th>
                                     <th scope="col" class="p-4">Email</th>
                                     <th scope="col" class="p-4">Date de Naissance</th>
+                                    <th scope="col" class="p-4">Inscription</th>
                                     <th scope="col" class="p-4">Dernière Mise à Jour</th>
                                     <th scope="col" class="p-4">Administrateur</th>
                                     <th scope="col" class="p-4">Actions</th>
@@ -91,11 +113,17 @@ const fileExists = (avatar) => {
                                 <tr v-for="user in users" :key="user.id" class="border-b hover:bg-gray-100">
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                                         <div class="flex items-center mr-3">
-
                                             <img v-if="user.avatar && fileExists(user.avatar)"
-                                                :src="`/storage/${user.avatar}`" alt="Avatar" class="h-8 w-auto mr-3">
-                                            <img v-else src="/storage/avatars/jaXCAEW15ldqnJi8d0UHwQkHVYmKPNEjhjS01J1l.jpg" alt="Default Avatar"
-                                                class="h-8 rounded-full w-auto mr-3">
+                                                :src="`/storage/${user.avatar}`" alt="Avatar"
+                                                class="border-2 border-green-600 h-8 w-auto rounded-full mr-3">
+                                            <svg v-else
+                                                class="p-1 border-2 border-green-600 h-8 rounded-full w-auto mr-3"
+                                                fill="currentColor" viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
                                             {{ user.name }}
                                         </div>
                                     </th>
@@ -105,19 +133,24 @@ const fileExists = (avatar) => {
                                                 user.email }}</span>
                                     </td>
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ user.birthdate }}
+                                        {{ user.birthdate ?? '-' }}
                                     </td>
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ user.updated_at }}
+                                        {{ dayjs(user.created_at).fromNow() }}
                                     </td>
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                        <span :class="[user.isAdmin ? 'bg-green-100' : 'bg-red-100' ]"
-                                            class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
+                                        {{ dayjs(user.updated_at).fromNow() }}
+                                    </td>
+                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                                        <span :class="[user.isAdmin ? 'bg-green-100' : 'bg-red-100']"
+                                            class="text-green-800 text-xs font-medium px-2 py-0.5 rounded">
                                             {{ user.isAdmin ? 'Oui' : 'Non' }}
                                         </span>
                                     </td>
+
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                                         <div class="flex items-center space-x-4">
+                                            <Link :href="route('dashboard.users.edit', { user: user })">
                                             <button type="button" data-drawer-target="drawer-update-product"
                                                 data-drawer-show="drawer-update-product"
                                                 aria-controls="drawer-update-product"
@@ -132,6 +165,8 @@ const fileExists = (avatar) => {
                                                 </svg>
                                                 Edit
                                             </button>
+                                            </Link>
+                                            <Link :href="route('dashboard.users.show', { user: user })">
                                             <button type="button" data-drawer-target="drawer-read-product-advanced"
                                                 data-drawer-show="drawer-read-product-advanced"
                                                 aria-controls="drawer-read-product-advanced"
@@ -144,16 +179,16 @@ const fileExists = (avatar) => {
                                                 </svg>
                                                 Preview
                                             </button>
-                                            <button type="button" data-modal-target="delete-modal"
-                                                data-modal-toggle="delete-modal"
-                                                class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center">
+                                            </Link>
+                                            <button type="button" @click="confirmUserDeletion(user)"
+                                                class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path fill-rule="evenodd"
                                                         d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                                         clip-rule="evenodd" />
                                                 </svg>
-                                                Delete
+                                                Supprimer
                                             </button>
                                         </div>
                                     </td>
@@ -163,6 +198,26 @@ const fileExists = (avatar) => {
                     </div>
                 </div>
             </div>
+
+            <Modal :show="confirmingUserDeletion" @close="closeModal">
+                <div class="p-6">
+                    <h2 class="text-lg font-medium text-gray-900">
+                        Êtes-vous sûr de vouloir supprimer ce compte ?
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Une fois votre compte supprimé, toutes ses ressources et données seront définitivement
+                        supprimées.
+                    </p>
+                    <div class="mt-6 flex justify-end">
+                        <SecondaryButton @click="closeModal">
+                            Annuler
+                        </SecondaryButton>
+                        <DangerButton class="ms-3" @click="deleteUser">
+                            Supprimer le compte
+                        </DangerButton>
+                    </div>
+                </div>
+            </Modal>
         </section>
         <!-- End block -->
     </Dashboard>

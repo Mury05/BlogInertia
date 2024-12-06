@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('body');
+            $table->string('image')->nullable();
+            $table->string('tags' )->nullable();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('category_id')->nullable();
             $table->timestamps();

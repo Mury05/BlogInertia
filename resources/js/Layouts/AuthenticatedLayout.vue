@@ -28,7 +28,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
-                                    <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
+                                <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
 
@@ -47,7 +47,42 @@ const showingNavigationDropdown = ref(false);
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+                                                class="inline-flex gap-2 items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+
+
+                                                <div>
+                                                    <!-- Si l'utilisateur a un avatar -->
+                                                    <div v-if="$page.props.auth.user.avatar"
+                                                        class="relative inline-block">
+                                                        <!-- Avatar de l'utilisateur -->
+                                                        <img :src="`/storage/${$page.props.auth.user.avatar}`"
+                                                            alt="Avatar"
+                                                            class="h-8 w-8 border border-indigo-800 rounded-full">
+                                                        <!-- Indicateur de statut en ligne -->
+                                                        <span
+                                                            class="absolute bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                                                    </div>
+
+                                                    <!-- Si l'utilisateur n'a pas d'avatar -->
+                                                    <div v-else
+                                                        class="relative inline-block w-10 h-10 overflow-hidden bg-gray-100 rounded-full border-2 border-green-600">
+                                                        <!-- Icône par défaut -->
+                                                        <svg class="absolute w-12 h-12 text-gray-400 -left-1.5"
+                                                            fill="currentColor" viewBox="0 0 20 20"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <!-- Indicateur de statut en ligne -->
+                                                        <span
+                                                            class="absolute bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                                                    </div>
+                                                </div>
+
+
+
+
                                                 {{ $page.props.auth.user.name }}
 
                                                 <svg class="-me-0.5 ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -81,13 +116,13 @@ const showingNavigationDropdown = ref(false);
                                 class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none">
                                 <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path :class="{
-                                            hidden: showingNavigationDropdown,
+                                        hidden: showingNavigationDropdown,
                                         'inline-flex':
                                             !showingNavigationDropdown,
                                     }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 6h16M4 12h16M4 18h16" />
                                     <path :class="{
-                                            hidden: !showingNavigationDropdown,
+                                        hidden: !showingNavigationDropdown,
                                         'inline-flex':
                                             showingNavigationDropdown,
                                     }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,7 +166,7 @@ const showingNavigationDropdown = ref(false);
                     </div>
                 </div>
             </nav>
-            
+
             <!-- ===== Page Content ===== -->
             <main class="flex-grow">
                 <slot />
