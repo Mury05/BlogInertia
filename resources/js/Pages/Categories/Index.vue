@@ -4,19 +4,20 @@
 
     <a
       :href="route('categories.create')"
-      class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all"
+      class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all mb-4"
     >
       Ajouter une catégorie
     </a>
 
     <div class="mt-8">
-      <ul>
-        <li
+      <!-- Grille des catégories -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
           v-for="category in categories"
           :key="category.id"
-          class="bg-white shadow-md rounded-lg mb-4 p-4 flex justify-between items-center"
+          class="bg-white shadow-md rounded-lg p-4 flex flex-col"
         >
-          <div class="flex flex-col">
+          <div class="flex flex-col mb-4">
             <p class="font-semibold text-lg text-gray-800">{{ category.libelle }}</p>
             <p class="text-gray-600">{{ category.description }}</p>
           </div>
@@ -61,8 +62,8 @@
               </button>
             </form>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -77,12 +78,8 @@ const destroyCategory = async (id) => {
   if (confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) {
     await axios.delete(route("categories.destroy", id));
 
-    // Retirer la catégorie supprimée de la liste sans recharger la page
-
-    await Inertia.get(route("categories.index")); // const index = categories.findIndex((category) => category.id === id);
-    // if (index !== -1) {
-    //   categories.splice(index, 1); // Retirer la catégorie de la liste affichée
-    // }
+    // Recharger la liste des catégories
+    await Inertia.get(route("categories.index"));
   }
 };
 
