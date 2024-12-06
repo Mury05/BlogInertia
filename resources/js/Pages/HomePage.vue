@@ -29,16 +29,16 @@
             class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 h-full">
             <!-- Image (optionnelle) -->
             <div class="mb-6">
-              <img :src="article.image || 'https://via.placeholder.com/400x200'" alt="Image de l'article"
+              <img :src="'/storage/' + article.image || '0WFCrdLm2vNJHZxRGGZdEgGD4PVYxRLi1SutTRTi.png'" alt="Image de l'article"
                 class="w-full h-48 object-cover rounded-lg" />
             </div>
             <!-- Titre de l'article -->
-            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">
+            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white h-100">
               {{ article.title }}
             </h3>
             <!-- Extrait -->
             <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              {{ article.body.slice(0, 150) }}...
+              {{ article.body.slice(0, 120) }}...
             </p>
             <!-- Bouton -->
             <Link :href="`/articles/${article.id}`" method="get" as="button" type="button"
@@ -60,7 +60,7 @@
         <h2 class="text-3xl font-semibold text-gray-900 dark:text-white text-center">
           Catégories d'articles
         </h2>
-        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 h-300">
           <!-- Affichage dynamique des catégories -->
           <div v-for="(category, index) in categories" :key="category.id"
             class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md">
@@ -68,7 +68,7 @@
               {{ category.libelle }}
             </h4>
             <p class="mt-2 text-gray-600 dark:text-gray-300">
-              {{ category.description }}
+              {{ category.description .slice(0, 140)}}
             </p>
             <!-- Bouton dynamique -->
             <button class="mt-4 py-2 px-4 text-white font-semibold rounded-lg" :class="[

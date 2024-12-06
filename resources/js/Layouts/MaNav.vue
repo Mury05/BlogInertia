@@ -52,7 +52,6 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
-
                         <!-- Settings Dropdown -->
                         <div class="relative ms-3">
                             <Dropdown align="right" width="48">

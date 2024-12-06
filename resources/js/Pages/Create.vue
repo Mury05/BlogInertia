@@ -2,11 +2,10 @@
     <MaNav />
 
     <div class="p-8 bg-white min-h-screen flex items-center justify-center">
-        <form @submit.prevent="submit"
-            class="max-w-4xl w-full bg-white shadow-xl rounded-2xl p-8 transition-transform transform hover:scale-105">
+        <form @submit.prevent="submit" class="max-w-4xl w-full bg-white shadow-xl rounded-2xl p-8 transition-transform transform hover:scale-105" enctype="multipart/form-data">
             <h2 class="text-3xl font-bold mb-6 text-gray-800">Créer un Nouvel Article</h2>
 
-            <!-- Ligne 1 : Titre -->
+            <!-- Titre de l'Article -->
             <div class="mb-6">
                 <label for="title" class="block text-sm font-semibold text-gray-700">Titre de l'Article</label>
                 <input v-model="form.title" type="text" id="title" placeholder="Entrez le titre de l'article"
@@ -14,7 +13,7 @@
                     required />
             </div>
 
-            <!-- Ligne 2 : Contenu et Tags -->
+            <!-- Contenu et Tags -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <div>
                     <label for="body" class="block text-sm font-semibold text-gray-700">Contenu</label>
@@ -41,18 +40,12 @@
                     </div>
                     <div>
                         <label for="image" class="block text-sm font-semibold text-gray-700">Image</label>
-                        <input type="file" id="image" 
-                            class="w-full p-2 mt-2 border border-gray-300 rounded-lg bg-gray-50 text-lg text-gray-800 focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300 ease-in-out hover:border-blue-300" required/>
+                        <input type="file" id="image" @change="handleFileChange" 
+                            class="w-full p-2 mt-2 border border-gray-300 rounded-lg bg-gray-50 text-lg text-gray-800 focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300 ease-in-out hover:border-blue-300" />
                     </div>
                 </div>
             </div>
 
-            <!-- Ligne 3 : Catégorie et Image -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-
-            </div>
-
-            <!-- Bouton de Soumission -->
             <button type="submit"
                 class="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105">
                 Créer l'Article
@@ -66,7 +59,6 @@ import { ref } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
 import MaNav from '@/Layouts/MaNav.vue';
 
-// Récupérer les catégories passées par Laravel via Inertia
 const { categories } = usePage().props;
 
 // Formulaire réactif
@@ -75,12 +67,29 @@ const form = useForm({
     body: '',
     category: '',
     tags: '',
-    image: null,
+    image: null, // Image est null par défaut
 });
+
+// Fonction de gestion de la sélection de l'image
+const handleFileChange = (event) => {
+    const file = event.target.files[0]; // Prendre le premier fichier sélectionné
+    form.image = file; // Affecter l'image sélectionnée au formulaire
+};
 
 // Soumission du formulaire
 const submit = () => {
+    // Création de FormData pour envoyer les données du formulaire, y compris l'image
+    const formData = new FormData();
+    formData.append('title', form.title);
+    formData.append('body', form.body);
+    formData.append('tags', form.tags);
+    formData.append('category', form.category);
+    if (form.image) {
+        formData.append('image', form.image);
+    }
+
     form.post(route('articles.store'), {
+        data: formData,
         onSuccess: () => {
             form.reset();
             alert('Article créé avec succès');
@@ -90,10 +99,8 @@ const submit = () => {
 </script>
 
 <style scoped>
-/* Animation d'agrandissement du bouton */
-input,
-textarea,
-select {
+/* Styles d'animation pour les champs et le bouton */
+input, textarea, select {
     transition: all 0.3s ease-in-out;
 }
 
@@ -102,12 +109,7 @@ button:hover {
 }
 
 @keyframes scale-up {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.05);
-    }
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
 }
 </style>

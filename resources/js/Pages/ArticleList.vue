@@ -42,7 +42,7 @@
         </div>
 
         <!-- Corps de l'article -->
-        <p class="text-gray-700 mt-6 text-lg leading-relaxed">{{ article.body }}</p>
+        <p class="text-gray-700 mt-6 text-lg leading-relaxed">{{ article.body.slice(0, 200) }}...</p>
 
         <!-- Catégorie -->
         <div class="mt-6 text-sm text-gray-500">
@@ -50,7 +50,7 @@
         </div>
 
         <!-- Lien Voir Plus -->
-        <Link :href="route('articles.show', article.id)" as="button" type="button"
+        <Link :href="'/articles/' + article.id" as="button" type="button"
           class="w-full py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 mt-4">
           Voir plus...
         </Link>

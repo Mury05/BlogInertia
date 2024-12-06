@@ -15,22 +15,24 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/home', function () {
-//     return Inertia::render('HomePage');
-// })->name('home');
+// Route pour l'édition d'un article
+Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+// Route pour supprimer un article
+Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+
+// Route pour mettre à jour un article
+Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+
 
 Route::get('/home', [ArticleController::class, 'homePage'])->name('home');
 
 // Liste des articles
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles');
-
-
+Route::get('/article', [ArticleController::class, 'index'])->name('articles'); // Liste des articles
 // Formulaire de création d'un article
-Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create'); // Création d'un article
+Route::post('/article', [ArticleController::class, 'store'])->name('articles.store'); // Enregistrement d'un <article></article>
 // Affichage d'un article
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
-Route::get('/articles/recent', [ArticleController::class, 'getRecentArticles'])->name('articles.recent');
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show'); // Affichage d'un article spécifiqueRoute::get('/articles/recent', [ArticleController::class, 'getRecentArticles'])->name('articles.recent');
 
 
 
@@ -40,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update.avatar');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/dashboard.php';
