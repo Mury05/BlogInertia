@@ -19,6 +19,7 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    birthdate: user.birthdate,
 });
 </script>
 
@@ -67,6 +68,19 @@ const form = useForm({
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+            <div>
+                <InputLabel for="birthdate" value="Birthdate" />
+
+                <TextInput
+                    id="birthdate"
+                    type="date"
+                    class="mt-1 block w-full"
+                    v-model="form.birthdate"
+                    autocomplete="date"
+                />
+
+                <InputError class="mt-2" :message="form.errors.birthdate" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
