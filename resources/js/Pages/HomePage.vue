@@ -68,7 +68,7 @@
               {{ category.libelle }}
             </h4>
             <p class="mt-2 text-gray-600 dark:text-gray-300">
-              Découvrez nos articles pour cette catégorie.
+              {{ category.description }}
             </p>
             <!-- Bouton dynamique -->
             <button class="mt-4 py-2 px-4 text-white font-semibold rounded-lg" :class="[
