@@ -56,34 +56,34 @@
             </section>
 
 
-            <!-- Section des catégories -->
-            <section class="py-16">
-                <h2 class="text-3xl font-semibold text-gray-900 dark:text-white text-center">
-                    Catégories d'articles
-                </h2>
-                <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Affichage dynamique des catégories -->
-                    <div v-for="(category, index) in categories" :key="category.id"
-                        class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md">
-                        <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            {{ category.libelle }}
-                        </h4>
-                        <p class="mt-2 text-gray-600 dark:text-gray-300">
-                            Découvrez nos articles pour cette catégorie.
-                        </p>
-                        <!-- Bouton dynamique -->
-                        <button class="mt-4 py-2 px-4 text-white font-semibold rounded-lg" :class="[
-                            index === 0 ? 'bg-teal-600 hover:bg-teal-700' :
-                                index === 1 ? 'bg-orange-600 hover:bg-orange-700' :
-                                    index === 2 ? 'bg-indigo-600 hover:bg-indigo-700' :
-                                        index === 3 ? 'bg-red-600 hover:bg-red-700' :
-                                            'bg-gray-600 hover:bg-gray-700'
-                        ]">
-                            Explorer
-                        </button>
-                    </div>
-                </div>
-            </section>
+      <!-- Section des catégories -->
+      <section class="py-16">
+        <h2 class="text-3xl font-semibold text-gray-900 dark:text-white text-center">
+          Catégories d'articles
+        </h2>
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Affichage dynamique des catégories -->
+          <div v-for="(category, index) in categories" :key="category.id"
+            class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md">
+            <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
+              {{ category.libelle }}
+            </h4>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">
+              {{ category.description }}
+            </p>
+            <!-- Bouton dynamique -->
+            <button class="mt-4 py-2 px-4 text-white font-semibold rounded-lg" :class="[
+              index === 0 ? 'bg-teal-600 hover:bg-teal-700' :
+                index === 1 ? 'bg-orange-600 hover:bg-orange-700' :
+                  index === 2 ? 'bg-indigo-600 hover:bg-indigo-700' :
+                    index === 3 ? 'bg-red-600 hover:bg-red-700' :
+                      'bg-gray-600 hover:bg-gray-700'
+            ]">
+              Explorer
+            </button>
+          </div>
+        </div>
+      </section>
 
 
             <!-- Section des actions rapides -->
