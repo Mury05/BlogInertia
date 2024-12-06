@@ -64,20 +64,22 @@ const showingNavigationDropdown = ref(false);
                                                     </div>
 
                                                     <!-- Si l'utilisateur n'a pas d'avatar -->
-                                                    <div v-else
-                                                        class="relative inline-block w-10 h-10 overflow-hidden bg-gray-100 rounded-full border-2 border-green-600">
-                                                        <!-- Icône par défaut -->
-                                                        <svg class="absolute w-12 h-12 text-gray-400 -left-1.5"
-                                                            fill="currentColor" viewBox="0 0 20 20"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd"
-                                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                        <!-- Indicateur de statut en ligne -->
-                                                        <span
-                                                            class="absolute bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
-                                                    </div>
+                                                     <div v-else class="relative w-10 h-10" >
+                                                         <div
+                                                             class="relative inline-block w-10 h-10 overflow-hidden bg-gray-100 rounded-full border-2 border-green-600">
+                                                             <!-- Icône par défaut -->
+                                                             <svg class="absolute w-12 h-12 text-gray-400 -left-1.5"
+                                                                 fill="currentColor" viewBox="0 0 20 20"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                 <path fill-rule="evenodd"
+                                                                     d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                                     clip-rule="evenodd"></path>
+                                                             </svg>
+                                                             <!-- Indicateur de statut en ligne -->
+                                                            </div>
+                                                            <span
+                                                                class="absolute -bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                                                     </div>
                                                 </div>
 
 
