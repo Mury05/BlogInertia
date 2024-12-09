@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,3 +26,5 @@ Route::delete('/dashboard/users/{user}', [UserController::class, 'destroy'])->mi
 Route::get('/dashboard/articles', [ArticleController::class, 'indexAuth'])->middleware(['auth', 'verified'])->name('dashboard.articles.index');
 
 Route::get('/dashboard/articles/create', [ArticleController::class, 'create'])->name('dashboard.articles.create');
+
+Route::resource('categories', CategoryController::class);
