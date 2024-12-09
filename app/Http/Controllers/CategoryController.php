@@ -13,9 +13,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        // Tri des catégories par created_at en ordre décroissant
+        $categories = Category::orderBy('created_at', 'desc')->get();
+
         return Inertia::render('Categories/Index', [
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -36,16 +38,16 @@ class CategoryController extends Controller
             'libelle' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
         ]);
-    
+
         // Création de la nouvelle catégorie
         $category = Category::create($request->only('libelle', 'description'));
-    
-        // Récupérer la liste complète des catégories, y compris la nouvelle catégorie
-        $categories = Category::all();
-    
+
+        // Récupérer toutes les catégories triées par created_at en ordre décroissant
+        $categories = Category::orderBy('created_at', 'desc')->get();
+
         // Retourner la liste complète des catégories
         return Inertia::render('Categories/Index', [
-            'categories' => $categories, // Renvoie toutes les catégories, y compris la nouvelle
+            'categories' => $categories,
         ]);
     }
 
@@ -79,9 +81,16 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        // Supprimer la catégorie
         $category->delete();
-
-    // Après suppression, on redirige vers la page d'index avec la liste mise à jour
-        return redirect()->route('categories.index');
+    
+        // Récupérer les catégories restantes et renvoyer la mise à jour
+        $categories = Category::orderBy('created_at', 'desc')->get();
+    
+        // Retourner les catégories mises à jour avec Inertia
+        return Inertia::render('Categories/Index', [
+            'categories' => $categories,
+        ]);
     }
+    
 }
