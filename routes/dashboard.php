@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,3 +22,5 @@ Route::get('/dashboard/users/{user}/edit', [UserController::class, 'edit'])->mid
 Route::put('/dashboard/users/{user}/edit', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('dashboard.users.update');
 
 Route::delete('/dashboard/users/{user}', [UserController::class, 'destroy'])->middleware(['auth', 'verified'])->name('dashboard.users.destroy');
+
+Route::resource('categories', CategoryController::class);
