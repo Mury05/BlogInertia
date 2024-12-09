@@ -46,7 +46,7 @@ const form = useForm({
                     <form @submit.prevent="form.put(route('dashboard.users.update', { user: user.id }))" class="mt-6 space-y-6">
                         <div>
                             <div class="flex items-center">
-                                <Checkbox class="mx-3" name="isAdmin" v-model="form.isAdmin" :checked="form.isAdmin == 1 ? true : false" /> <!-- Utilisez v-model ici -->
+                                <Checkbox class="mx-3 cursor-pointer" name="isAdmin" v-model="form.isAdmin" :checked="form.isAdmin == 1 ? true : false" /> <!-- Utilisez v-model ici -->
                                 <InputLabel for="isAdmin" value="Donnez le rôle d'administrateur à cet utilisateur" />
                             </div>
                             <InputError class="mt-2" :message="form.errors.isAdmin" /> <!-- Corrigez le message d'erreur -->

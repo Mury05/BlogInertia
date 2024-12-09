@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -104,6 +105,8 @@ class ArticleController extends Controller
         return Inertia::render('HomePage', [
             'articles' => $articles,
             'categories' => $categories,
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
         ]);
     }
 }

@@ -41,7 +41,7 @@
 <script setup>
 import Comments from './Comments.vue';
 import MaNav from '@/Layouts/MaNav.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 

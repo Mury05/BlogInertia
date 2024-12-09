@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,13 +30,15 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Article $article)
     {
-        dd($request);
+        $request['article_id']= $article->id;
+
+        // dd($request);
         // Validation des données envoyées
         $request->validate([
             'comment' => 'required|string|max:255',
-            'article_id' => 'required|exists:article,id',
+            'article_id' => 'required|exists:articles,id',
         ]);
         Comment::create([
             'comment' => $request->comment,
@@ -74,8 +77,11 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy( Article $article,Comment $comment)
     {
-        //
+        // dd('ok');        
+        $comment->delete();
+        return redirect()->route('articles.show', $article->id)->with('success', 'Commentaire supprimé');
+
     }
 }

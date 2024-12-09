@@ -1,25 +1,39 @@
 <script setup>
+import DangerButton from '@/Components/DangerButton.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 defineProps(['article', 'comments']);
-// console.log(comments)
 
 // Référence pour le texte du nouveau commentaire
 const newCommentText = ref('');
 const form = useForm({
     comment: '',
-    article_id: ''
 });
+const confirmingCommentDeletion = ref(false);
+const commentToDelete = ref(null);
+const articleToDelete = ref(null);
 
-// Fonction pour soumettre le formulaire
-const submitForm = () => {
-    form.post(route('articles.comments.create'), {
-        onSuccess: () => {
-            form.reset('comment'); // Réinitialiser le champ commentaire après succès
-        },
-    });
+const confirmCommentDeletion = (article, comment) => {
+    commentToDelete.value = comment;
+    articleToDelete.value = article;
+    confirmingCommentDeletion.value = true; // Ouvre le modal
 };
 
+const deleteComment = () => {
+    form.delete(route('articles.comments.destroy', { comment: commentToDelete.value.id, article: articleToDelete.value.id }), {
+        preserveScroll: true,
+        onSuccess: () => closeModal()
+    });
+};
+const closeModal = () => {
+    confirmingCommentDeletion.value = false;
+    commentToDelete.value = null;
+    articleToDelete.value = null;
+};
 </script>
 
 <template>
@@ -53,9 +67,12 @@ const submitForm = () => {
                             <p class="mt-4 text-gray-700 dark:text-gray-300" v-html="article.body">
                             </p>
                         </div>
-                        <form @submit.prevent="submitForm" class="mt-8">
+                        <form @submit.prevent="form.post(route('articles.comments.create', article.id), {
+                            onSuccess: () => {
+                                form.reset(); // Réinitialiser tous les champs après succès
+                            }
+                        })" class="mt-8">
                             <div class="mb-4">
-                                <input type="hidden" :value="article.id">
                                 <label for="comment" class="sr-only">Votre commentaire</label>
                                 <textarea id="comment" rows="6" v-model="form.comment"
                                     class="block w-full p-4 text-sm text-gray-900 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-400"
@@ -77,31 +94,47 @@ const submitForm = () => {
                             class="p-6 mt-6 bg-white rounded-lg shadow-md dark:bg-gray-900 dark:border dark:border-gray-700 space-y-4">
                             <footer class="flex justify-between items-center">
                                 <div class="flex items-center">
-                                    <img v-if="comment.user.avatar" :src="`/storage/${comment.user.avatar}`"
-                                        alt="Avatar" class="border-2 border-green-600 h-8 w-auto rounded-full mr-3">
+                                    <img v-if="comment.user && comment.user.avatar"
+                                        :src="`/storage/${comment.user.avatar}`" alt="Avatar"
+                                        class="border-2 border-green-600 h-8 w-auto rounded-full mr-3">
                                     <svg v-else class="p-1 border-2 border-green-600 h-8 rounded-full w-auto mr-3"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
                                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
                                         </path>
                                     </svg>
-                                    <!-- <img class="w-10 h-10 rounded-full"
-                                    :src="comment.user.avatar" :alt="comment.user.name"> -->
                                     <div class="ml-3">
                                         <p class="text-lg font-semibold text-gray-900 dark:text-white">{{
-                                            comment.user.name }}</p>
+                                            comment.user ? comment.user.name : 'Utilisateur anonyme' }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400"><time datetime="2022-02-08"
                                                 title="8 février 2022">{{ comment.createdAt }}</time></p>
                                     </div>
                                 </div>
-                                <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
-                                    class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition-all duration-200">
-                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 16 3">
-                                        <path
-                                            d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                                    </svg>
-                                </button>
+
+
+
+                                <Dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
+                                            class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition-all duration-200">
+                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor" viewBox="0 0 16 3">
+                                                <path
+                                                    d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                                            </svg>
+                                        </button>
+                                    </template>
+
+                                    <template #content>
+                                        <DropdownLink :href="route('profile.edit')">
+                                            Edit
+                                        </DropdownLink>
+                                        <DropdownLink @click="confirmCommentDeletion(article, comment)" method=""
+                                            as="button">
+                                            Delete
+                                        </DropdownLink>
+                                    </template>
+                                </Dropdown>
                             </footer>
 
                             <p class="text-gray-600 dark:text-gray-300">
@@ -120,8 +153,30 @@ const submitForm = () => {
                                     Reply
                                 </button>
                             </div>
+
+
                         </article>
 
+                        <Modal :show="confirmingCommentDeletion" @close="closeModal">
+                            <div class="p-6">
+                                <h2 class="text-lg font-medium text-gray-900">
+                                    Êtes-vous sûr de vouloir supprimer ce commentaire ?
+                                </h2>
+                                <p class="mt-1 text-sm text-gray-600">
+                                    Une fois votre commentaire supprimé, toutes ses ressources et données seront
+                                    définitivement
+                                    supprimées.
+                                </p>
+                                <div class="mt-6 flex justify-end">
+                                    <SecondaryButton @click="closeModal">
+                                        Annuler
+                                    </SecondaryButton>
+                                    <DangerButton class="ms-3" @click="deleteComment">
+                                        Supprimer le commentaire
+                                    </DangerButton>
+                                </div>
+                            </div>
+                        </Modal>
 
                     </section>
                 </div>
