@@ -27,8 +27,10 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'birthdate' => $this->faker->date(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'isAdmin' => false,
         ];
     }
 
@@ -41,4 +43,12 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+     // Méthode pour définir un utilisateur administrateur
+     public function admin(): static
+     {
+         return $this->state(fn (array $attributes) => [
+             'isAdmin' => true,
+         ]);
+     }
 }
