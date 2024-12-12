@@ -31,7 +31,16 @@ const confirmUserDeletion = (user) => {
 const deleteUser = () => {
     form.delete(route('dashboard.users.destroy', { user: userToDelete.value.id }), {
         preserveScroll: true,
-        onSuccess: () => closeModal()
+        onSuccess: () => {
+            closeModal()
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès!',
+                text: 'Utilisateur supprimé avec succès.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6'
+            });
+        }
     });
 };
 

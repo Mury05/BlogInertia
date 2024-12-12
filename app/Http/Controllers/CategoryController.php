@@ -16,7 +16,7 @@ class CategoryController extends Controller
         // Tri des catégories par created_at en ordre décroissant
         $categories = Category::orderBy('created_at', 'desc')->get();
 
-        return Inertia::render('Categories/Index', [
+        return Inertia::render('Dashboard/Categories/Index', [
             'categories' => $categories,
         ]);
     }
@@ -26,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Categories/Create');
+        return Inertia::render('Dashboard/Categories/Create');
     }
 
     /**
@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $categories = Category::orderBy('created_at', 'desc')->get();
 
         // Retourner la liste complète des catégories
-        return Inertia::render('Categories/Index', [
+        return Inertia::render('Dashboard/Categories/Index', [
             'categories' => $categories,
         ]);
     }
@@ -56,7 +56,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return Inertia::render('Categories/Edit', [
+        return Inertia::render('Dashboard/Categories/Edit', [
             'category' => $category
         ]);
     }
@@ -83,14 +83,14 @@ class CategoryController extends Controller
     {
         // Supprimer la catégorie
         $category->delete();
-    
+
         // Récupérer les catégories restantes et renvoyer la mise à jour
         $categories = Category::orderBy('created_at', 'desc')->get();
-    
+
         // Retourner les catégories mises à jour avec Inertia
-        return Inertia::render('Categories/Index', [
+        return Inertia::render('Dashboard/Categories/Index', [
             'categories' => $categories,
         ]);
     }
-    
+
 }

@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [ArticleController::class, 'indexAuth'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard/users', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.users.index');
 
@@ -23,4 +21,10 @@ Route::put('/dashboard/users/{user}/edit', [UserController::class, 'update'])->m
 
 Route::delete('/dashboard/users/{user}', [UserController::class, 'destroy'])->middleware(['auth', 'verified'])->name('dashboard.users.destroy');
 
-Route::resource('categories', CategoryController::class);
+Route::get('/dashboard/articles', [ArticleController::class, 'indexAuth'])->middleware(['auth', 'verified'])->name('dashboard.articles.index');
+
+Route::get('/dashboard/articles/create', [ArticleController::class, 'create'])->middleware(['auth', 'verified'])->name('dashboard.articles.create');
+
+Route::delete('/dashboard/articles/{article}/destroy', [ArticleController::class, 'destroy'])->middleware(['auth', 'verified'])->name('dashboard.articles.destroy');
+
+Route::resource('/dashboard/categories', CategoryController::class)->middleware(['auth', 'verified']);

@@ -8,6 +8,14 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+defineProps({
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    }
+});
 </script>
 
 <template>
@@ -21,9 +29,14 @@ const showingNavigationDropdown = ref(false);
                     <div class="flex">
                         <!-- Logo -->
                         <div class="flex shrink-0 items-center">
-                            <Link :href="route('dashboard')">
+                            <!-- <Link :href="route('dashboard')">
                             <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
-                            </Link>
+                            </Link> -->
+                            <Link :href="route('articles')"
+            class="gap-1 inline-flex items-center justify-center h-16 w-52 text-gray-800 text-2xl font-bold hover:bg-indigo-100 transition-colors duration-300">
+        <ApplicationLogo class="block h-10 w-auto fill-indigo-600" />
+        <span class="font-bold text-indigo-600">ArtLog</span>
+        </Link>
                         </div>
 
                         <!-- Navigation Links -->
@@ -34,22 +47,44 @@ const showingNavigationDropdown = ref(false);
                             <NavLink :href="route('articles')" :active="route().current('articles')">
                                 Listes des articles
                             </NavLink>
-                            <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+
+                            <nav v-if="!canLogin" class="space-x-8 flex flex-1 justify-between">
+                                <NavLink v-if="$page.props.auth.user" :href="route('dashboard')"
+                                    :active="route().current('dashboard')">
+                                    Dashboard
+                                </NavLink>
+
+                                <template v-else>
+                                    <NavLink :href="route('login')" :active="route().current('login')"> Log in
+                                    </NavLink>
+
+                                    <NavLink  :href="route('register')"
+                                        :active="route().current('register')"> Register
+                                    </NavLink>
+                                </template>
+                            </nav>
+                            <!-- <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                 Dashboard
-                            </NavLink>
+                            </NavLink> -->
                         </div>
                     </div>
 
                     <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                        <div class="flex justify-center items-center h-1 bg-gray-100">
-                            <div class="relative w-full max-w-lg">
-                                <input type="text" placeholder="Rechercher un article, une catégorie..."
-                                    class="w-full py-2 pl-6 pr-20 text-lg text-gray-900 bg-white border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" />
-                                <button
-                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white font-semibold px-3 py-1 rounded-full shadow-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300">
-                                    Rechercher
-                                </button>
-                            </div>
+                        <div class="w-full md:w-1/2">
+                            <form class="flex items-center">
+                                <label for="simple-search" class="sr-only">Search</label>
+                                <div class="relative w-full">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor"
+                                            viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
+                                        </svg>
+                                    </div>
+                                    <input type="text" id="simple-search" placeholder="Search" required=""
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2">
+                                </div>
+                            </form>
                         </div>
 
 
@@ -57,7 +92,33 @@ const showingNavigationDropdown = ref(false);
                         <div class="relative ms-3">
                             <Dropdown align="right" width="48">
                                 <template #trigger>
-                                    <span class="inline-flex rounded-md">
+                                    <span class="inline-flex rounded-md" v-if="$page.props.auth.user">
+                                        <!-- Si l'utilisateur a un avatar -->
+                                        <div v-if="$page.props.auth.user.avatar" class="relative inline-block">
+                                            <!-- Avatar de l'utilisateur -->
+                                            <img :src="`/storage/${$page.props.auth.user.avatar}`" alt="Avatar"
+                                                class="h-8 w-8 border border-indigo-800 rounded-full">
+                                            <!-- Indicateur de statut en ligne -->
+                                            <span
+                                                class="absolute bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                                        </div>
+                                        <!-- Si l'utilisateur n'a pas d'avatar -->
+                                        <div v-else class="relative w-10 h-10">
+                                            <div
+                                                class="relative inline-block w-10 h-10 overflow-hidden bg-gray-100 rounded-full border-2 border-green-600">
+                                                <!-- Icône par défaut -->
+                                                <svg class="absolute w-12 h-12 text-gray-400 -left-1.5"
+                                                    fill="currentColor" viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                <!-- Indicateur de statut en ligne -->
+                                            </div>
+                                            <span
+                                                class="absolute -bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                                        </div>
                                         <button type="button"
                                             class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
                                             {{ $page.props.auth.user.name ?? '' }}
@@ -123,7 +184,7 @@ const showingNavigationDropdown = ref(false);
 
                 <!-- Responsive Settings Options -->
                 <div class="border-t border-gray-200 pb-1 pt-4">
-                    <div class="px-4">
+                    <div v-if="$page.props.auth.user" class="px-4">
                         <div class="text-base font-medium text-gray-800">
                             {{ $page.props.auth.user.name ?? '' }}
                         </div>
@@ -146,6 +207,3 @@ const showingNavigationDropdown = ref(false);
 
     </div>
 </template>
-
-
-
