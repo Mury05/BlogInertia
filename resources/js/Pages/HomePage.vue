@@ -5,7 +5,7 @@
             <!-- Section de bienvenue -->
             <section class="text-center bg-white dark:bg-gray-800 shadow-md rounded-xl p-8">
                 <h1 class="text-4xl font-semibold text-gray-900 dark:text-white">
-                    Bienvenue dans votre gestionnaire d'articles !
+                    Bienvenue dans notre blog d'articles !
                 </h1>
                 <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
                     Organisez et gérez vos articles de manière simple et efficace.
@@ -87,7 +87,7 @@
 
 
             <!-- Section des actions rapides -->
-            <section class="bg-gray-800 p-8 text-center rounded-xl shadow-lg">
+            <!-- <section class="bg-gray-800 p-8 text-center rounded-xl shadow-lg">
                 <h2 class="text-3xl font-semibold text-white">
                     Actions rapides
                 </h2>
@@ -102,7 +102,7 @@
                         Supprimer un article
                     </button>
                 </div>
-            </section>
+            </section> -->
         </div>
     </main>
 </template>

@@ -29,9 +29,14 @@ defineProps({
                     <div class="flex">
                         <!-- Logo -->
                         <div class="flex shrink-0 items-center">
-                            <Link :href="route('dashboard')">
+                            <!-- <Link :href="route('dashboard')">
                             <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
-                            </Link>
+                            </Link> -->
+                            <Link :href="route('articles')"
+            class="gap-1 inline-flex items-center justify-center h-16 w-52 text-gray-800 text-2xl font-bold hover:bg-indigo-100 transition-colors duration-300">
+        <ApplicationLogo class="block h-10 w-auto fill-indigo-600" />
+        <span class="font-bold text-indigo-600">ArtLog</span>
+        </Link>
                         </div>
 
                         <!-- Navigation Links -->
@@ -43,7 +48,7 @@ defineProps({
                                 Listes des articles
                             </NavLink>
 
-                            <nav v-if="!canLogin" class="-mx-3 flex flex-1 justify-between">
+                            <nav v-if="!canLogin" class="space-x-8 flex flex-1 justify-between">
                                 <NavLink v-if="$page.props.auth.user" :href="route('dashboard')"
                                     :active="route().current('dashboard')">
                                     Dashboard
@@ -76,7 +81,7 @@ defineProps({
                                                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
                                         </svg>
                                     </div>
-                                    <input type="text" id="simple-search" placeholder="Rechercher" required=""
+                                    <input type="text" id="simple-search" placeholder="Search" required=""
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2">
                                 </div>
                             </form>

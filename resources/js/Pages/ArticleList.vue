@@ -25,7 +25,7 @@
           <!-- Bouton de commentaires avec largeur de 30% et espacement avec le svg -->
           <div class="w-3/10 flex justify-end">
             <Link :href="route('articles.show', article.id)" method="get" as="button" type="button"
-              class="relative inline-flex items-center justify-center p-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
+              class="relative inline-flex items-center justify-center p-2 text-sm font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-5 mr-2">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -35,7 +35,7 @@
               Commentaires
               <div
                 class="absolute inline-flex items-center justify-center w-5 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2">
-                8
+               {{ article.comments.length }}
               </div>
             </Link>
           </div>
@@ -51,7 +51,7 @@
 
         <!-- Lien Voir Plus -->
         <Link :href="route('articles.show', article.id)" as="button" type="button"
-          class="w-full py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 mt-4">
+          class="w-full py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-300 mt-4">
           Voir plus...
         </Link>
       </div>

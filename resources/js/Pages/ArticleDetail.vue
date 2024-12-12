@@ -8,30 +8,30 @@
             </h1>
 
             <!-- Contenu de l'article -->
-            <p class="text-gray-800 text-lg mb-8 leading-relaxed text-justify border-l-4 pl-4 border-blue-500"
+            <p class="text-gray-800 text-lg mb-8 leading-relaxed text-justify border-l-4 pl-4 border-indigo-500"
                 v-html="article.body">
             </p>
 
             <!-- Détail de publication -->
             <div class="text-center mb-6">
                 <small class="text-gray-600 text-sm italic">
-                    Publié le : <span class="text-blue-500">{{ formatDate(article.created_at) }}</span> par
-                    <span class="font-semibold text-blue-500">{{ article.user.name }}</span>
+                    Publié le : <span class="text-indigo-500">{{ formatDate(article.created_at) }}</span> par
+                    <span class="font-semibold text-indigo-500">{{ article.user.name }}</span>
                 </small>
             </div>
 
             <!-- Boutons Éditer et Supprimer -->
             <div class="flex justify-center gap-4">
-                <Link :href="`/articles/${article.id}/edit`" method="get" as="button" type="button"
-                    class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <Link method="get" as="button" type="button"
+                    class="px-6 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-300">
                 Éditer</Link>
-                <Link :href="`/articles/${article.id}`" method="delete" as="button" type="button"
+                <Link :href="`/articles/${article.id}`" method="" as="button" type="button"
                     class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 focus:outline-none focus:ring-4 focus:ring-red-300"
                     @click.prevent="deleteArticle(article.id)">Supprimer</Link>
             </div>
 
             <!-- Section commentaires -->
-            <div class="mt-10 border-t-4 border-blue-500 pt-6">
+            <div class="mt-10 border-t-4 border-indigo-500 pt-6">
                 <Comments :comments="article.comments" :article="article" />
             </div>
         </div>
@@ -58,10 +58,16 @@ const formatDate = (date) => {
 };
 
 // Méthode pour supprimer l'article
-const deleteArticle = (id) => {
+const deleteArticle = async (id) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
         // Redirection après suppression, ou gestion d'état
-        Inertia.delete(`/articles/${id}`);
+        try {
+            await axios.delete(route("dashboard.articles.destroy", id));
+
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+        }
+        // Inertia.delete(`/dashboard/articles/${id}/destroy`);
     }
 };
 </script>

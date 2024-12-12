@@ -37,6 +37,16 @@ const submit = () => {
         data: formData,
         onFinish: () => form.reset('password', 'password_confirmation'),
         forceFormData: true, // Important pour qu'Inertia sache que c'est un FormData
+        onSuccess: () => {
+            form.reset();
+            Swal.fire({
+                icon: 'success',
+                title: 'Utilisateur créé!',
+                text: 'Utilisateur crée avec succès !',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6'
+            });
+        },
     });
 };
 </script>

@@ -120,8 +120,23 @@ const submit = () => {
         forceFormData: true,
         onSuccess: () => {
             form.reset();
-            alert('Article créé avec succès');
+            Swal.fire({
+                icon: 'success',
+                title: 'Article créé!',
+                text: 'Votre article a été créé avec succès.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6'
+            });
         },
+        onError: (errors) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur!',
+                text: 'Il y a eu un problème lors de la création de l\'article.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+        }
     });
 };
 onMounted(() => {

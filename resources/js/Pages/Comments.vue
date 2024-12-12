@@ -6,7 +6,12 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/fr';
 defineProps(['article', 'comments']);
+dayjs.extend(relativeTime);
+dayjs.locale('fr');
 
 // Référence pour le texte du nouveau commentaire
 const newCommentText = ref('');
@@ -58,14 +63,14 @@ const closeModal = () => {
                                 </p>
                                 <div class="mt-4">
                                     <span v-for="tag in article.tags.split(',')" :key="tag"
-                                        class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded">
+                                        class="inline-block bg-indigo-100 text-indigo-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded">
                                         #{{ tag }}
                                     </span>
                                 </div>
                             </div>
 
-                            <p class="mt-4 text-gray-700 dark:text-gray-300" v-html="article.body">
-                            </p>
+                            <!-- <p class="mt-4 text-gray-700 dark:text-gray-300" v-html="article.body">
+                            </p> -->
                         </div>
                         <form @submit.prevent="form.post(route('articles.comments.create', article.id), {
                             onSuccess: () => {
@@ -75,11 +80,11 @@ const closeModal = () => {
                             <div class="mb-4">
                                 <label for="comment" class="sr-only">Votre commentaire</label>
                                 <textarea id="comment" rows="6" v-model="form.comment"
-                                    class="block w-full p-4 text-sm text-gray-900 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-400"
+                                    class="block w-full p-4 text-sm text-gray-900 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-indigo-400"
                                     placeholder="Écrire un commentaire..." required></textarea>
                             </div>
                             <button type="submit"
-                                class="w-full py-3 px-6 bg-blue-500 text-white rounded-lg font-medium shadow-md hover:bg-blue-600 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-300 transition-all duration-300 ease-in-out">
+                                class="w-full py-3 px-6 bg-indigo-500 text-white rounded-lg font-medium shadow-md hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-300 transition-all duration-300 ease-in-out">
                                 Publier un commentaire
                             </button>
                         </form>
@@ -107,7 +112,7 @@ const closeModal = () => {
                                         <p class="text-lg font-semibold text-gray-900 dark:text-white">{{
                                             comment.user ? comment.user.name : 'Utilisateur anonyme' }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400"><time datetime="2022-02-08"
-                                                title="8 février 2022">{{ comment.createdAt }}</time></p>
+                                                title="8 février 2022">{{  dayjs(comment.created_at).fromNow() }}</time></p>
                                     </div>
                                 </div>
 
@@ -126,7 +131,7 @@ const closeModal = () => {
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')">
+                                        <DropdownLink>
                                             Edit
                                         </DropdownLink>
                                         <DropdownLink @click="confirmCommentDeletion(article, comment)" method=""

@@ -16,7 +16,10 @@ class ArticleController extends Controller
     public function index()
     {
         // Récupérer tous les articles avec leur catégorie associée
-        $articles = Article::with('category')->get();
+        $articles = Article::orderBy('created_at', 'desc')
+        ->with('category')
+        ->with('comments')
+        ->get();
 
         // Passer les articles et leurs catégories à la vue Inertia
         return Inertia::render('ArticleList', [
@@ -27,7 +30,12 @@ class ArticleController extends Controller
     {
         // Récupérer les articles de l'utilisateur connecté avec leur catégorie associée
         $user = Auth::user(); // Obtenir l'utilisateur connecté
-        $articles = Article::with('category')->where('user_id', $user->id)->get();
+        $articles = Article::orderBy('created_at', 'desc')
+        ->with('category')
+        ->with('comments')
+        ->where('user_id', $user->id)
+        ->get();
+        // $articles = Article::with('category')->with('comments')->where('user_id', $user->id)->get();
 
         // Passer les articles et leurs catégories à la vue Inertia
         return Inertia::render('Dashboard/Articles/Index', [
@@ -108,5 +116,13 @@ class ArticleController extends Controller
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
         ]);
+    }
+
+    public function destroy(Article $article)
+    {
+        $article->delete();
+        // return to_route('articles');
+
+        return redirect()->route('articles')->with('success', 'Article supprimé');
     }
 }
